@@ -1,9 +1,14 @@
-import { Text, View } from 'react-native';
+import { Link } from 'expo-router';
+import { StatusBar, Text, View } from 'react-native';
 
 export default function Index() {
   return (
-    <View className="bg-slate-900 flex-1 justify-center items-center ">
-      <Text className="text-xl text-white">Welcome</Text>
+    <View className="flex-1 items-center justify-center bg-black ">
+      <Text className="text-xl text-white font-pbold">Aora</Text>
+      <StatusBar barStyle="dark-content" />
+      <Link href="/home" className="text-blue-200">
+        Go to home
+      </Link>
     </View>
   );
 }
