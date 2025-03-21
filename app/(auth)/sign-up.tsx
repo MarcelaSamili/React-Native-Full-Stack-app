@@ -6,8 +6,9 @@ import FormField from '@/components/FormField';
 import CustomButton from '@/components/CustomButton';
 import { Link } from 'expo-router';
 
-const SignIn = () => {
+const SignUP = () => {
   const [form, setForm] = useState({
+    username: '',
     email: '',
     password: '',
   });
@@ -25,8 +26,16 @@ const SignIn = () => {
             className="w-[115px] h-[35px]"
           />
           <Text className="text-2xl text-white text-semibold mt-10 font-psemibold">
-            Login Aora
+            Criar conta Aora
           </Text>
+
+          <FormField
+            title="Username"
+            value={form.username}
+            handleChangeText={e => setForm({ ...form, username: e })}
+            otherStyles="mt-10"
+          />
+
           <FormField
             title="Email"
             value={form.email}
@@ -35,7 +44,7 @@ const SignIn = () => {
             keyboardType="email-address"
           />
           <FormField
-            title="Password"
+            title="Senha"
             value={form.password}
             handleChangeText={e => setForm({ ...form, password: e })}
             otherStyles="mt-7"
@@ -49,14 +58,14 @@ const SignIn = () => {
 
           <View className="justify-center pt-5 flex-row gap-2">
             <Text className="text-lg text-gray-100 font-pregular">
-              Não tem uma conta ?
+              Crie sua conta agora.
             </Text>
 
             <Link
-              href={'/sign-up'}
+              href={'/sign-in'}
               className="text-lg font-psemibold text-secondary"
             >
-              Criar conta
+              Entrar
             </Link>
           </View>
         </View>
@@ -65,4 +74,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUP;

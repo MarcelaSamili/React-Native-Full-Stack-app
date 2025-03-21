@@ -37,8 +37,13 @@ export default function RootLayout() {
   }
   return (
     <>
-      <StatusBar hidden={false} />
-      <Stack></Stack>
+      <Stack screenOptions={{ headerShown: false }}>
+        {/*Aparentimente a opção screenOptions foi acrescentada a <Stack> function então não precisa 
+        mais fazer dessa forma de baixo*/}
+        {/*<Stack.Screen name="(auth)" /*options={{ headerShown: false }} />*/}
+        {/*<Stack.Screen name="(tabs)" /*options={{ headerShown: false }} />*/}
+        {/*<Stack.Screen name="index" /*options={{ headerShown: false }} />*/}
+      </Stack>
     </>
   );
 }
