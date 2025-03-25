@@ -20,7 +20,9 @@ const SignUp = () => {
     if (!form.username || !form.email || !form.password) {
       Alert.alert('Error, Por favor, preencha todos os campos.');
     }
+
     setIsSubmittin(true);
+
     try {
       const result = await createUser(form.email, form.password, form.username);
 
@@ -28,12 +30,12 @@ const SignUp = () => {
       router.replace('/home');
     } catch (error) {
       Alert.alert('ERROR ao tentar submeter o formulário');
-      throw new Error();
     } finally {
       setIsSubmittin(false);
     }
     createUser();
   };
+  /*--------------------------------------------- */
   return (
     <SafeAreaView className="bg-black h-full">
       <ScrollView>
