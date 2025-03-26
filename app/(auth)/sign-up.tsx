@@ -14,26 +14,26 @@ const SignUp = () => {
     password: '',
   });
 
-  const [isSubmittin, setIsSubmittin] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submit = async () => {
     if (!form.username || !form.email || !form.password) {
       Alert.alert('Error, Por favor, preencha todos os campos.');
+      return;
     }
 
-    setIsSubmittin(true);
+    setIsSubmitting(true);
 
     try {
       const result = await createUser(form.email, form.password, form.username);
 
-      // set it to global state
+      // Redirecionar para home
       router.replace('/home');
     } catch (error) {
       Alert.alert('ERROR ao tentar submeter o formulário');
     } finally {
-      setIsSubmittin(false);
+      setIsSubmitting(false);
     }
-    createUser();
   };
   /*--------------------------------------------- */
   return (
@@ -73,7 +73,7 @@ const SignUp = () => {
             title="Entrar"
             handlePress={submit}
             containerStyles="m-7"
-            isLoading={isSubmittin}
+            isLoading={isSubmitting}
           />
 
           <View className="justify-center pt-5 flex-row gap-2">
