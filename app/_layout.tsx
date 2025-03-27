@@ -3,11 +3,12 @@ import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'react-native';
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
+import { GlobalProvider } from '@/context/globalProvider';
 
 // Evitar que a tela inicial seja ocultada automaticamente antes que o carregamento do ativo seja concluído.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+const RootLayout = () => {
   const [fontsLoaded, error] = useFonts({
     'Poppins-Black': require('../assets/fonts/Poppins-Black.ttf'),
     'Poppins-Bold': require('../assets/fonts/Poppins-Bold.ttf'),
@@ -37,13 +38,17 @@ export default function RootLayout() {
   }
   return (
     <>
-      <Stack screenOptions={{ headerShown: false }}>
-        {/*Aparentimente a opção screenOptions foi acrescentada a <Stack> function então não precisa 
+      <GlobalProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          {/*Aparentimente a opção screenOptions foi acrescentada a <Stack> function então não precisa 
         mais fazer dessa forma de baixo*/}
-        {/*<Stack.Screen name="(auth)" /*options={{ headerShown: false }} />*/}
-        {/*<Stack.Screen name="(tabs)" /*options={{ headerShown: false }} />*/}
-        {/*<Stack.Screen name="index" /*options={{ headerShown: false }} />*/}
-      </Stack>
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+        </Stack>
+      </GlobalProvider>
     </>
   );
-}
+};
+
+export default RootLayout;

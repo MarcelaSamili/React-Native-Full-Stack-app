@@ -12,7 +12,6 @@ const SignIn = () => {
     email: '',
     password: '',
   });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submit = async () => {
