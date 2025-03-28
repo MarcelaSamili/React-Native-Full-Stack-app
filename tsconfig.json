@@ -14,6 +14,7 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "nativewind-env.d.ts",
-    "context/globalProvider.js"
+    "context/globalProvider.js",
+    "lib/useAppwrite.ts"
   ]
 }
