@@ -29,13 +29,13 @@ const Home = () => {
     setRefreshing(false);
   };
 
-  //console.log('Os posts foram carregados:', posts);
+  //console.log('Posts carregados:', JSON.stringify(posts, null, 2));
   return (
     <SafeAreaView className="bg-primary h-full ">
       <FlatList
-        data={posts}
+        data={posts || []}
         keyExtractor={item => item.$id}
-        renderItem={({ item: video }) => <VideoCard video={video} />}
+        renderItem={({ item }: { item: any }) => <VideoCard video={item} />}
         ListHeaderComponent={() => (
           <View className="my-6 px-4 space-y-6">
             <View className="justify-between items-start flex-row mb-6">
