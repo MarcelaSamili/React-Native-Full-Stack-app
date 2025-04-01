@@ -30,7 +30,7 @@ const Home = () => {
     setRefreshing(false);
   };
 
-  //console.log('Posts carregados:', JSON.stringify(posts, null, 2));
+  //console.log('Posts carregados:', JSON.stringify(latestPosts, null, 2));
   return (
     <SafeAreaView className="bg-primary h-full ">
       <FlatList
@@ -70,7 +70,7 @@ const Home = () => {
                 Latest Videos
               </Text>
 
-              <Trending posts={latestPosts ?? []} />
+              <Trending posts={latestPosts || []} />
             </View>
           </View>
         )}
