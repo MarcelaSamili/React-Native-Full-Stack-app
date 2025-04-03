@@ -11,6 +11,9 @@ import {
 
 import * as Animatable from 'react-native-animatable';
 
+//import { Video, ResizeMode } from 'expo-av';
+
+import { useEvent } from 'expo';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
 //Animações
@@ -45,7 +48,7 @@ interface TrendingItemProps {
   activeItem: string;
   item: {
     $id: string;
-    video: string;
+    video: string; //video URI
     thumbnail: string;
   };
 }
@@ -53,11 +56,17 @@ interface TrendingItemProps {
 const TrendingItem = ({ activeItem, item }: TrendingItemProps) => {
   const [play, setPlay] = useState(false);
   const player = useVideoPlayer(item.video);
+  console.log('URL do vídeo:', item.video);
 
   useEffect(() => {
-    const subscription = player.addListener('timeupdate', event => {
-      if (event.currentTime >= player.duration) {
-        setPlay(false);
+    const subscription = player.addListener('statusChange', ({ status }) => {
+      console.log('Novo status do player:', status);
+
+      if (status === 'error') {
+        console.warn(
+          'Erro ao carregar o vídeo. Verifique a URL ou tente novamente.'
+        );
+        setPlay(false); // Evita que o vídeo desapareça
       }
     });
 
@@ -65,7 +74,6 @@ const TrendingItem = ({ activeItem, item }: TrendingItemProps) => {
       subscription.remove();
     };
   }, [player]);
-
   return (
     <Animatable.View
       className="mr-5 "
@@ -74,9 +82,8 @@ const TrendingItem = ({ activeItem, item }: TrendingItemProps) => {
     >
       {play ? (
         <VideoView
-          player={player}
           className="w-52 h-72 rounded-3xl mt-3 bg-white/35"
-          contentFit="contain"
+          player={player}
           allowsFullscreen
           allowsPictureInPicture
         />
