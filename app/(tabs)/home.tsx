@@ -57,12 +57,8 @@ const Home = () => {
               </View>
             </View>
             <SearchInput
-              title={''}
-              value={''}
               placeholder="Search for a video topic"
-              handleChangeText={function (text: string): void {
-                throw new Error('Function not implemented.');
-              }}
+              initialQuery={''}
             />
 
             <View className="w-full flex-1 pt-5 pb-8">
