@@ -1,12 +1,12 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { icons } from '@/constants';
-
+import { WebView } from 'react-native-webview';
 interface VideoCardProps {
   video: {
     title?: string;
     thumbnail: string;
-    video?: string;
+    video: string; //url
     users: {
       username?: string;
       avatar?: string;
@@ -17,11 +17,12 @@ const VideoCard = ({
   video: {
     title,
     thumbnail,
-    video,
+    video, //url do video vindo do appwrite
     users: { username = 'Anônimo', avatar = '' },
   },
 }: VideoCardProps) => {
   const [play, setPlay] = useState(false);
+
   return (
     <View className="flex-col items-center px-4 pb-14">
       <View className="flex-row gap-3 items-start">
@@ -60,12 +61,17 @@ const VideoCard = ({
       </View>
 
       {play ? (
-        <Text className="text-white">Playing...</Text>
+        <WebView //Caso a url que esta recebendo for do youtube
+          className="w-full h-60 rounded-3xl mt-3 bg-white/35"
+          source={{ uri: video }}
+          allowsFullscreenVideo
+          //startInLoadingState
+        />
       ) : (
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={() => setPlay(true)}
           className="w-full h-60 rounded-xl mt-3 relative justify-center items-center "
+          onPress={() => setPlay(true)}
         >
           <Image
             source={{ uri: thumbnail }}

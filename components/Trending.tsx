@@ -8,7 +8,7 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
-
+import { WebView } from 'react-native-webview';
 import * as Animatable from 'react-native-animatable';
 
 //import { Video, ResizeMode } from 'expo-av';
@@ -55,7 +55,7 @@ interface TrendingItemProps {
 
 const TrendingItem = ({ activeItem, item }: TrendingItemProps) => {
   const [play, setPlay] = useState(false);
-  const player = useVideoPlayer(item.video);
+  /*const player = useVideoPlayer(item.video);//Caso o url não seja do youtube esse jeito vai dar certo.
   console.log('URL do vídeo:', item.video);
 
   useEffect(() => {
@@ -73,19 +73,27 @@ const TrendingItem = ({ activeItem, item }: TrendingItemProps) => {
     return () => {
       subscription.remove();
     };
-  }, [player]);
+  }, [player]);*/
+
   return (
     <Animatable.View
       className="mr-5 "
       animation={activeItem === item.$id ? zoomIn : zoomOut}
-      duration={500}
+      duration={700}
     >
       {play ? (
-        <VideoView
+        /*<VideoView  //Caso a url que esta recebendo NÃO for do youtube
           className="w-52 h-72 rounded-3xl mt-3 bg-white/35"
           player={player}
           allowsFullscreen
           allowsPictureInPicture
+        />*/
+
+        <WebView //Caso a url que esta recebendo for do youtube
+          className="w-52 h-72 rounded-3xl mt-3 bg-white/35"
+          source={{ uri: item.video }}
+          allowsFullscreenVideo
+          startInLoadingState
         />
       ) : (
         <TouchableOpacity

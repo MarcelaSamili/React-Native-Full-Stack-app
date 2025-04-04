@@ -70,7 +70,13 @@ const Home = () => {
                 Latest Videos
               </Text>
 
-              <Trending posts={latestPosts || []} />
+              <Trending
+                posts={(latestPosts || []).map(post => ({
+                  $id: post.$id,
+                  video: post.video,
+                  thumbnail: post.thumbnail,
+                }))}
+              />
             </View>
           </View>
         )}
