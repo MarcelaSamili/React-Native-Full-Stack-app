@@ -1,59 +1,81 @@
-import { View, Text, FlatList } from 'react-native';
-
+import { View, FlatList, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import SearchInput from '@/components/SearchInput';
-
 import EmptyState from '@/components/EmptyState';
-import { searchPosts } from '@/lib/appwrite';
+import { getCurrentUser, getUserPosts, singOut } from '@/lib/appwrite';
 import { useAppwrite } from '@/lib/useAppwrite';
 import VideoCard from '@/components/VideoCard';
-import { useLocalSearchParams } from 'expo-router';
-import { useCallback, useEffect } from 'react';
+
+import { useGlobalContext } from '@/context/globalProvider';
+import { icons } from '@/constants';
+import InfoBox from '@/components/InfoBox';
+import { useCallback } from 'react';
+import { router } from 'expo-router';
 
 const Profine = () => {
-  const { query } = useLocalSearchParams();
-  const searchValue = typeof query === 'string' ? query : '';
+  const { user, setUser, setIsLoggedIn } = useGlobalContext();
 
-  const getSearchPosts = useCallback(() => {
-    // aqui estamos usando usecallback para garantir que a função "fn" só mude quando "searchValue" mudar
-    return searchPosts(searchValue);
-  }, [searchValue]);
+  const getUserPostsCallback = useCallback(() => {
+    return getUserPosts(user.$id);
+  }, [user.$id]);
 
-  const { data: searchPostsData, refetch } = useAppwrite({
-    fn: getSearchPosts, //() => searchPosts(searchValue),
+  const { data: searchUserPostsData, refetch } = useAppwrite({
+    fn: getUserPostsCallback,
   });
 
-  //console.log('query:', query); //testando o retorno
+  const logout = async () => {
+    await singOut();
+    setUser(null);
+    setIsLoggedIn(false);
 
-  //aqui seria uma opção sem o useCallBack
-  /*useEffect(() => {
-    refetch();
-  }, [query]);*/
+    router.replace('/(auth)/sign-in');
+  };
 
+  console.log('Id do usuário:', user.$id);
   return (
     <SafeAreaView className="bg-primary h-full ">
       <FlatList
-        data={searchPostsData || []}
+        data={searchUserPostsData || []}
         keyExtractor={item => item.$id}
         renderItem={({ item }: { item: any }) => <VideoCard video={item} />}
         ListHeaderComponent={() => (
-          <View className="my-6 px-4 space-y-6">
-            <View className="justify-between items-start flex-row mb-6">
-              <View>
-                <Text className="font-pmedium text-sm text-gray-100">
-                  Procure os resutados para
-                </Text>
+          <View className="w-full justify-center items-center mt-6 mb-12 px-4">
+            <TouchableOpacity
+              className="w-full items-end mb-10"
+              onPress={logout}
+            >
+              <Image
+                source={icons.logout}
+                resizeMode="contain"
+                className="w-6 h-6"
+              />
+            </TouchableOpacity>
 
-                <Text className="text-2xl font-psemibold text-white">
-                  {searchValue || 'Nenhuma consulta'}
-                </Text>
+            <View className="w-16 h-16 border border-secndary rounded-lg justify-center">
+              <Image
+                source={{ uri: user?.avatar }}
+                className="w-[90%] h-[90%] rounded-lg"
+                resizeMode="cover"
+              />
+            </View>
 
-                <SearchInput
-                  placeholder="Search for a video topic"
-                  initialQuery={String(query)}
-                />
-              </View>
+            <InfoBox
+              title={user?.username}
+              containerStyle="mt-5"
+              titleStyles="text-lg"
+            />
+
+            <View className="mt-5 flex-row">
+              <InfoBox
+                title={searchUserPostsData.length || 0}
+                subtitle="posts"
+                containerStyle="mr-10"
+                titleStyles="text-xl"
+              />
+              <InfoBox
+                title="1.2k"
+                subtitle="Followers"
+                titleStyles="text-xl"
+              />
             </View>
           </View>
         )}
