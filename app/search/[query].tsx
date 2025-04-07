@@ -9,16 +9,25 @@ import { searchPosts } from '@/lib/appwrite';
 import { useAppwrite } from '@/lib/useAppwrite';
 import VideoCard from '@/components/VideoCard';
 import { useLocalSearchParams } from 'expo-router';
+import { useCallback, useEffect } from 'react';
 
 const Search = () => {
-  const query = useLocalSearchParams();
-  const { data: searchPostsData } = useAppwrite({
-    fn: () => searchPosts(query),
+  const { query } = useLocalSearchParams();
+  const searchValue = typeof query === 'string' ? query : '';
+
+  const getSearchPosts = useCallback(() => {
+    // aqui estamos usando usecallback para garantir que a função "fn" só mude quando "searchValue" mudar
+    return searchPosts(searchValue);
+  }, [searchValue]);
+
+  const { data: searchPostsData, refetch } = useAppwrite({
+    fn: getSearchPosts, //() => searchPosts(searchValue),
   });
 
-  console.log('query:', query);
+  //console.log('query:', query); //testando o retorno
 
-  /* useEffect(() => {
+  //aqui seria uma opção sem o useCallBack
+  /*useEffect(() => {
     refetch();
   }, [query]);*/
 
@@ -37,8 +46,9 @@ const Search = () => {
                 </Text>
 
                 <Text className="text-2xl font-psemibold text-white">
-                  {query?.value ?? 'Nenhuma consulta'}
+                  {searchValue || 'Nenhuma consulta'}
                 </Text>
+
                 <SearchInput
                   placeholder="Search for a video topic"
                   initialQuery={String(query)}
