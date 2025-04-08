@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { icons } from '@/constants';
 
 interface FormFieldProps {
-  title: string;
-  value: string;
+  title?: string;
+  value?: string;
   placeholder?: string;
-  handleChangeText: (text: string) => void;
+  handleChangeText?: (text: string) => void;
   otherStyles?: string;
   keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
 }
