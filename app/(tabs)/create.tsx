@@ -7,7 +7,7 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import FormField from '@/components/FormField';
 import WebView from 'react-native-webview';
 import { icons } from '@/constants';
@@ -19,17 +19,19 @@ import { router } from 'expo-router';
 import { createVideo } from '@/lib/appwrite';
 import { useGlobalContext } from '@/context/globalProvider';
 
+import { useVideoPlayer, VideoView } from 'expo-video';
+
 const Create = () => {
   const { user } = useGlobalContext();
   const [uploading, setUploading] = useState(false);
   const [form, setForm] = useState<{
     title: string;
-    video: DocumentPickerAsset | null;
+    video: DocumentPickerAsset | string; //null
     thumbnail: DocumentPickerAsset | null;
     prompt: string;
   }>({
     title: '',
-    video: null,
+    video: '', //null
     thumbnail: null,
     prompt: '',
   });
@@ -38,8 +40,8 @@ const Create = () => {
     const result = await DocumentPicker.getDocumentAsync({
       type:
         selectType === 'image'
-          ? ['image/png', 'image/jpg']
-          : ['video/mp4', 'video/gif'],
+          ? ['image/png', 'image/jpg', 'image/jpeg']
+          : ['video/mp4', 'video/gif', 'video/quicktime', 'video/x-m4v'],
     });
 
     if (!result.canceled && result.assets?.length) {
@@ -78,13 +80,15 @@ const Create = () => {
     } finally {
       setForm({
         title: '',
-        video: null,
+        video: '', //mudei aqui , era null
         thumbnail: null,
         prompt: '',
       });
       setUploading(false);
     }
   };
+
+  const player = useVideoPlayer(form.video);
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -107,9 +111,9 @@ const Create = () => {
 
         <TouchableOpacity onPress={() => openPiker('video')}>
           {form.video ? (
-            <WebView
-              source={{ uri: form.video.uri }}
-              className="w-full h-64 rounded-2xl"
+            <VideoView
+              player={player}
+              style={{ width: '100%', height: 200, borderRadius: 16 }}
             />
           ) : (
             <View className="w-full h-40 px-4 bg-black-100 rounded-2xl justify-center items-center">
@@ -155,8 +159,8 @@ const Create = () => {
         <FormField
           title="AI Prompt"
           value={form.prompt}
-          placeholder="The prompt you uese to create this video"
-          handleChangeText={e => setForm({ ...form, title: e })}
+          placeholder="The prompt you use to create this video"
+          handleChangeText={e => setForm({ ...form, prompt: e })}
           otherStyles="mt-7"
         />
         <CustomButton
