@@ -16,6 +16,8 @@ import * as Animatable from 'react-native-animatable';
 import { useEvent } from 'expo';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
+import * as DocumentPicker from 'expo-document-picker';
+import { DocumentPickerAsset } from 'expo-document-picker';
 //Animações
 const zoomIn = {
   from: {
@@ -39,11 +41,6 @@ Animatable.initializeRegistryWithDefinitions({
 });
 //-------------------------------------------
 
-/*interface TrendingItemProps {
-  activeItem: any;
-  item: any;
-}*/
-
 interface TrendingItemProps {
   activeItem: string;
   item: {
@@ -55,25 +52,10 @@ interface TrendingItemProps {
 
 const TrendingItem = ({ activeItem, item }: TrendingItemProps) => {
   const [play, setPlay] = useState(false);
-  /*const player = useVideoPlayer(item.video);//Caso o url não seja do youtube esse jeito vai dar certo.
+
+  const player = useVideoPlayer(item.video); //Caso o url não seja do youtube esse jeito vai dar certo.
   console.log('URL do vídeo:', item.video);
 
-  useEffect(() => {
-    const subscription = player.addListener('statusChange', ({ status }) => {
-      console.log('Novo status do player:', status);
-
-      if (status === 'error') {
-        console.warn(
-          'Erro ao carregar o vídeo. Verifique a URL ou tente novamente.'
-        );
-        setPlay(false); // Evita que o vídeo desapareça
-      }
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, [player]);*/
 
   return (
     <Animatable.View
@@ -81,39 +63,33 @@ const TrendingItem = ({ activeItem, item }: TrendingItemProps) => {
       animation={activeItem === item.$id ? zoomIn : zoomOut}
       duration={700}
     >
-      {play ? (
-        /*<VideoView  //Caso a url que esta recebendo NÃO for do youtube
-          className="w-52 h-72 rounded-3xl mt-3 bg-white/35"
-          player={player}
-          allowsFullscreen
-          allowsPictureInPicture
-        />*/
-
-        <WebView //Caso a url que esta recebendo for do youtube
-          className="w-52 h-72 rounded-3xl mt-3 bg-white/35"
-          source={{ uri: item.video }}
-          allowsFullscreenVideo
-          startInLoadingState
-        />
-      ) : (
-        <TouchableOpacity
-          className="relative justify-center items-center "
-          activeOpacity={0.7}
-          onPress={() => setPlay(true)}
-        >
-          <ImageBackground
-            source={{ uri: item.thumbnail }}
-            className="w-52 h-72 rounded-3xl py-4 overflow-hidden shadow-lg shadow-black/40"
-            resizeMode="cover"
+     
+        {play ? (
+          <VideoView //Caso a url que esta recebendo NÃO for do youtube
+            style={{ width: '100%', height: 200, borderRadius: 16 }}
+            player={player}
+            //allowsFullscreen
+            //allowsPictureInPicture
           />
-
-          <Image
-            source={icons.play}
-            className="h-12 w-12 absolute"
-            resizeMode="contain"
-          />
-        </TouchableOpacity>
-      )}
+        ) : (
+          <TouchableOpacity
+            className="relative justify-center items-center "
+            activeOpacity={0.7}
+            onPress={() => setPlay(true)}
+          >
+            <ImageBackground
+              source={{ uri: item.thumbnail }}
+              className="w-52 h-72 rounded-3xl py-4 overflow-hidden shadow-lg shadow-black/40"
+              resizeMode="cover"
+            />
+            <Image
+              source={icons.play}
+              className="h-12 w-12 absolute"
+              resizeMode="contain"
+            />
+            */
+          </TouchableOpacity>
+        )}
     </Animatable.View>
   );
 };

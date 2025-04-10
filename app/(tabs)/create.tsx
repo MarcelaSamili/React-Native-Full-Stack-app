@@ -52,11 +52,7 @@ const Create = () => {
       } else if (selectType === 'video') {
         setForm(prev => ({ ...prev, video: asset }));
       }
-    } /*else {
-      setTimeout(() => {
-        Alert.alert('Document picked', JSON.stringify(result, null, 2));
-      }, 100);
-    }*/
+    }
   };
 
   const submit = async () => {
